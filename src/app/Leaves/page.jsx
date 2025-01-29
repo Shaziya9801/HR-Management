@@ -14,6 +14,7 @@ import {
     CardContent,
 } from "@mui/material";
 import supabase from "../../../utils/supabase/client";
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 const Leave = () => {
     const [formData, setFormData] = useState({
@@ -60,7 +61,15 @@ const Leave = () => {
         if (error) {
             console.error("Error inserting data:", error);
         } else {
-            setSuccessMessage("Leave request submitted successfully!");
+            // Show SweetAlert2 notification
+            Swal.fire({
+                title: "Success!",
+                text: "Leave request submitted successfully!",
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#00796b",  // Change the button color if needed
+            });
+
             setFormData({
                 firstName: "",
                 lastName: "",
@@ -166,7 +175,7 @@ const Leave = () => {
                             Employee Details
                         </Typography>
 
-                        {[
+                        {[ 
                             { label: "First Name", name: "firstName" },
                             { label: "Last Name", name: "lastName" },
                             { label: "Employee ID", name: "employeeId" },
@@ -209,8 +218,7 @@ const Leave = () => {
                                 backgroundColor: ' #00796b',
                                 fontWeight: "bold",
                             },
-                        }}
-                        >
+                        }}>
                             Submit
                         </Button>
                     </form>

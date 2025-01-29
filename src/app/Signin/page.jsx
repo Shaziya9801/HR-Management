@@ -4,7 +4,9 @@ import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import supabase from '../../../utils/supabase/client';
 import Link from 'next/link';
-const SignIn=()=> {
+import Swal from 'sweetalert2';  // Import SweetAlert
+
+const SignIn = () => {
     const router = useRouter();
     const [formData, setformData] = useState({
         email: '',
@@ -26,14 +28,29 @@ const SignIn=()=> {
                 password: formData.password,
             });
             if (data) {
-                alert("Login Successful");
-                router.push('/Dashboard');
+                Swal.fire({   // SweetAlert success alert
+                    title: 'Login Successful',
+                    icon: 'success',
+                    confirmButtonText: 'Okay',
+                }).then(() => {
+                    router.push('/Dashboard');
+                });
             }
             if (error) {
-                alert(error.message);
+                Swal.fire({   // SweetAlert error alert
+                    title: 'Error!',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                });
             }
         } catch (error) {
-            alert("Unexpected error: " + error.message);
+            Swal.fire({   // SweetAlert unexpected error alert
+                title: 'Unexpected Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     }
 
@@ -59,7 +76,7 @@ const SignIn=()=> {
                 }}
             >
                 <Typography variant="h5" align="center" gutterBottom sx={{
-                    fontFamily:"-apple-system",
+                    fontFamily: "-apple-system",
                     fontWeight: 'bold',
                     fontSize: 40,
                 }}>
@@ -94,10 +111,10 @@ const SignIn=()=> {
                             marginTop: 2,
                             padding: 1,
                             backgroundColor: ' #004d40',
-                            color:"white",
+                            color: "white",
                             '&:hover': {
-                            backgroundColor: ' #00796b',
-                            fontWeight:"bold",
+                                backgroundColor: ' #00796b',
+                                fontWeight: "bold",
                             },
                         }}
                     >
@@ -109,7 +126,7 @@ const SignIn=()=> {
                         sx={{ marginTop: 2 }}
                     >
                         Don't have an account?{' '}
-                        <Link href="/Registration" style={{ color: '#1976d2',fontWeight:"bold" }}>
+                        <Link href="/Registration" style={{ color: '#1976d2', fontWeight: "bold" }}>
                             Sign Up
                         </Link>
                     </Typography>

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {TextField,Button,RadioGroup,FormControlLabel,Radio,Typography,Card,CardContent,Grid,Box,} from "@mui/material";
+import { TextField, Button, RadioGroup, FormControlLabel, Radio, Typography, Card, CardContent, Grid, Box } from "@mui/material";
 import supabase from "../../../utils/supabase/client";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const Recruitment = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +24,30 @@ const Recruitment = () => {
     try {
       const { data, error } = await supabase.from("recruitment").insert([formData]);
       if (error) throw error;
-      alert("Job posted successfully!");
+
+      // Show success alert
+      Swal.fire({
+        title: "Success!",
+        text: "Job posted successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+        background: '#004d40',  // Optional, to match your theme
+        color: '#ffffff'        // Optional, to match your theme
+      });
+
       fetchJobs();
     } catch (error) {
       console.error("Error posting job:", error.message);
+
+      // Show error alert
+      Swal.fire({
+        title: "Error",
+        text: "There was an error posting the job.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+        background: '#d32f2f', // Optional, to match your theme
+        color: '#ffffff'       // Optional, to match your theme
+      });
     }
   };
 
@@ -51,8 +72,8 @@ const Recruitment = () => {
         paddingLeft: "400px",
         fontWeight: "750",
         fontSize: "32px",
-        marginTop:"80px",
-        marginRight:"450px"
+        marginTop: "80px",
+        marginRight: "450px"
       }}>
         Upcoming Recruitments
       </Typography>
@@ -182,27 +203,27 @@ const Recruitment = () => {
           variant="contained"
           color="primary"
           onClick={handlePostJob}
-          sx={{ 
+          sx={{
             mt: 2,
             backgroundColor: " #004d40",
             color: "white",
             "&:hover": {
               backgroundColor: ' #00796b',
-              fontWeight:"bold",
-            } 
+              fontWeight: "bold",
+            }
           }}
         >
           Post Job
         </Button>
       </Box>
 
-      <Typography variant="h5" gutterBottom sx={{ 
+      <Typography variant="h5" gutterBottom sx={{
         mt: 4,
         color: "#26a69a",
         fontWeight: "750",
         fontSize: "35px",
-        margin:"30px",
-        }}>
+        margin: "30px",
+      }}>
         Posted Jobs
       </Typography>
       <Grid container spacing={2}>
@@ -220,31 +241,31 @@ const Recruitment = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{fontWeight:"bold"}}>
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
                   Job Title: {job.job_title}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" sx={{
-                  fontWeight:"bold",
-                  color:"black"
-                  }}>
+                  fontWeight: "bold",
+                  color: "black"
+                }}>
                   Job Description: {job.job_description}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" sx={{
-                  fontWeight:"bold",
-                  color:"black"
-                  }}>
+                  fontWeight: "bold",
+                  color: "black"
+                }}>
                   Experience: {job.experience}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" sx={{
-                  fontWeight:"bold",
-                  color:"black"
-                  }}>
+                  fontWeight: "bold",
+                  color: "black"
+                }}>
                   Salary: {job.salary}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" sx={{
-                  fontWeight:"bold",
-                  color:"black"
-                  }}>
+                  fontWeight: "bold",
+                  color: "black"
+                }}>
                   Location: {job.location}
                 </Typography>
               </CardContent>

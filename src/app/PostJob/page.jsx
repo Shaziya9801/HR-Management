@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import supabase from "../../../utils/supabase/client";
-import { Box, Button, Modal, TextField, Typography, Card, CardContent, CardActions, Grid, } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography, Card, CardContent, CardActions, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const PostJobs = () => {
     const [open, setOpen] = useState(false); // Modal state
@@ -21,23 +22,35 @@ const PostJobs = () => {
             const { data, error } = await supabase.from("Post_Job").select("*");
             if (error) {
                 console.error("Error fetching jobs:", error.message);
-                alert("Error fetching jobs!");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error fetching jobs!",
+                });
             } else {
                 setJobs(data);
             }
         } catch (err) {
             console.error("Unexpected error fetching jobs:", err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Unexpected error fetching jobs!",
+            });
         }
     };
 
     // Add Job to Supabase
     const addJob = async () => {
-        const { job_role, company_name, job_description, location, salary } =
-            formData;
+        const { job_role, company_name, job_description, location, salary } = formData;
 
         // Validate form data
         if (!job_role || !company_name || !job_description || !location || !salary) {
-            alert("Please fill out all fields");
+            Swal.fire({
+                icon: "warning",
+                title: "Missing Fields",
+                text: "Please fill out all fields",
+            });
             return;
         }
 
@@ -54,9 +67,17 @@ const PostJobs = () => {
 
             if (error) {
                 console.error("Error adding job:", error.message);
-                alert(`Error adding job: ${error.message}`);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error adding job: ${error.message}`,
+                });
             } else {
-                alert("Job added successfully!");
+                Swal.fire({
+                    icon: "success",
+                    title: "Job Added!",
+                    text: "Job added successfully!",
+                });
                 fetchJobs(); // Refresh the job list
                 setOpen(false); // Close the modal
                 setFormData({
@@ -69,6 +90,11 @@ const PostJobs = () => {
             }
         } catch (err) {
             console.error("Unexpected error adding job:", err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Unexpected error adding job!",
+            });
         }
     };
 
@@ -243,7 +269,6 @@ const PostJobs = () => {
                                 <Typography variant="body2" color="textSecondary"
                                     sx={{ fontWeight: "bold", color: "black" }}
                                 >
-
                                     Salary: {job.salary}
                                 </Typography>
                             </CardContent>
