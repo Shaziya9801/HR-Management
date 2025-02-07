@@ -8,6 +8,7 @@ import LightModeIcon from "@mui/icons-material/WbSunny";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import logo from '../../../public/Assest/hr.png'
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 // Supabase setup
 const supabase = createClient(
@@ -53,8 +54,19 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
-    alert("Logged out!");
-    router.push("/Signin");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        alert("Logged out!");
+        router.push("/Signin");
+      }
+    });
   };
 
   return (

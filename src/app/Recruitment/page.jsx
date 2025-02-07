@@ -21,32 +21,51 @@ const Recruitment = () => {
   };
 
   const handlePostJob = async () => {
+    // Validate form data
+    if (!formData.job_title || !formData.job_description || !formData.experience || !formData.salary || !formData.location) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please fill out all fields",
+      });
+      return;
+    }
+
+    // Show SweetAlert2 loader spinner
+    Swal.fire({
+      title: "Posting Job...",
+      text: "Please wait while we post your job.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     try {
       const { data, error } = await supabase.from("recruitment").insert([formData]);
       if (error) throw error;
 
-      // Show success alert
+      // Close the loader and show success alert
       Swal.fire({
         title: "Success!",
         text: "Job posted successfully!",
         icon: "success",
         confirmButtonText: "OK",
-        background: '#004d40',  // Optional, to match your theme
-        color: '#ffffff'        // Optional, to match your theme
+        // background: ' #004d40',
+        color: 'black' 
       });
 
       fetchJobs();
     } catch (error) {
       console.error("Error posting job:", error.message);
-
-      // Show error alert
+      // Close the loader and show error alert
       Swal.fire({
         title: "Error",
         text: "There was an error posting the job.",
         icon: "error",
         confirmButtonText: "Try Again",
-        background: '#d32f2f', // Optional, to match your theme
-        color: '#ffffff'       // Optional, to match your theme
+        background: ' #d32f2f', 
+        color: ' #ffffff'  
       });
     }
   };
@@ -58,6 +77,23 @@ const Recruitment = () => {
       setJobs(data);
     } catch (error) {
       console.error("Error fetching jobs:", error.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const { data, error } = await supabase.from("recruitment").delete().match({ id: id });
+    if (error) {
+      console.error("Error deleting leave request:", error);
+    } else {
+      Swal.fire({
+        title: "Deleted!",
+        text: "Leave request has been deleted successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#00796b",
+      });
+      // Refresh the leave requests after deletion
+      fetchJobs();
     }
   };
 
@@ -268,6 +304,16 @@ const Recruitment = () => {
                 }}>
                   Location: {job.location}
                 </Typography>
+                <Button variant="contained" color="error"
+                  onClick={() => handleDelete(job.id)}
+                  sx={{
+                    marginTop: 2,
+                    padding: 1,
+                    color: "white",
+                    '&:hover': {
+                      fontWeight: "bold",
+                    },
+                  }}>Delete</Button>
               </CardContent>
             </Card>
           </Grid>

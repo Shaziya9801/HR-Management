@@ -61,7 +61,7 @@ const Register = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 minHeight: '100vh',
-                backgroundColor: '  #004d40',
+                // backgroundColor: '  #004d40',
                 padding: 2,
             }}
         >
@@ -73,6 +73,10 @@ const Register = () => {
                     width: '100%',
                     borderRadius: 3,
                     boxShadow: '0px 8px 16px rgba(226, 223, 223, 0.31)',
+                    border: "2px solid #004d40",
+                    "&:hover": {
+                        borderColor: " #00796b",
+                    },
                 }}
             >
                 <Typography variant="h5" align="center" gutterBottom sx={{

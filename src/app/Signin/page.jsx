@@ -27,8 +27,19 @@ const SignIn = () => {
                 email: formData.email,
                 password: formData.password,
             });
-            if (data) {
-                Swal.fire({   // SweetAlert success alert
+
+            if (error) {  // Handle error first
+                Swal.fire({
+                    title: 'Error!',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                });
+                return;
+            }
+
+            if (data.user) {  // Check if user exists in response
+                Swal.fire({
                     title: 'Login Successful',
                     icon: 'success',
                     confirmButtonText: 'Okay',
@@ -36,16 +47,8 @@ const SignIn = () => {
                     router.push('/Dashboard');
                 });
             }
-            if (error) {
-                Swal.fire({   // SweetAlert error alert
-                    title: 'Error!',
-                    text: error.message,
-                    icon: 'error',
-                    confirmButtonText: 'Try Again',
-                });
-            }
         } catch (error) {
-            Swal.fire({   // SweetAlert unexpected error alert
+            Swal.fire({
                 title: 'Unexpected Error!',
                 text: error.message,
                 icon: 'error',
@@ -61,7 +64,7 @@ const SignIn = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 minHeight: '100vh',
-                backgroundColor: ' #004d40',
+                // backgroundColor: ' #004d40',
                 padding: 2,
             }}
         >
@@ -72,7 +75,11 @@ const SignIn = () => {
                     maxWidth: 400,
                     width: '100%',
                     borderRadius: 3,
+                    border: "2px solid #004d40",
                     boxShadow: '0px 8px 16px rgba(226, 223, 223, 0.31)',
+                    "&:hover": {
+                        borderColor: " #00796b",
+                    },
                 }}
             >
                 <Typography variant="h5" align="center" gutterBottom sx={{
@@ -92,6 +99,7 @@ const SignIn = () => {
                         margin="normal"
                         value={formData.email}
                         onChange={handleChange}
+                        required
                     />
                     <TextField
                         label="Password"
@@ -102,6 +110,7 @@ const SignIn = () => {
                         margin="normal"
                         value={formData.password}
                         onChange={handleChange}
+                        required
                     />
                     <Button
                         variant="contained"
